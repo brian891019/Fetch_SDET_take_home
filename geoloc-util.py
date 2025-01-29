@@ -1,5 +1,11 @@
 import argparse
-import requests, sys, json
+import requests, json
+
+#To protect  API key, we should store it securely in an environment variable or a separate configuration file outside of your 
+#main codebase, allowing you to access it without exposing the key within your application's 
+#source code. 
+
+API_KEY = "f897a99d971b5eef57be6fafa0d83239"
 
 def get_location_by_zip_code(zip_code: str):
     """
@@ -9,7 +15,7 @@ def get_location_by_zip_code(zip_code: str):
     :rtype: JSON
     """
     url: str = "http://api.openweathermap.org/geo/1.0/zip"
-    parammeters = {'zip': zip_code, 'appid': "f897a99d971b5eef57be6fafa0d83239",'country': "US"}
+    parammeters = {'zip': zip_code, 'appid': API_KEY,'country': "US"}
     response = requests.get(url,params=parammeters)
 
     #4xx Status Codes (Client Error)
@@ -29,7 +35,7 @@ def get_location_by_name(city: str, state: str):
     """
     url: str = "http://api.openweathermap.org/geo/1.0/direct"
     
-    parammeters = {'q': f"{city},{state},{'US'}", 'appid': "f897a99d971b5eef57be6fafa0d83239",'limit': 1}
+    parammeters = {'q': f"{city},{state},{'US'}", 'appid': API_KEY,'limit': 1}
     response = requests.get(url,params=parammeters)
 
     #4xx Status Codes (Client Error)
@@ -39,6 +45,10 @@ def get_location_by_name(city: str, state: str):
         return response.json()
 
 def check_zip_city(locations):
+    """
+    get the detail data from the input(zip or city)
+
+    """
     result = []
     formatted_data = None  
     for location in locations:
