@@ -33,7 +33,6 @@ def get_location_by_name(city: str, state: str):
     
     parammeters = {'q': f"{city},{state},{'US'}", 'appid': API_KEY,'limit': 1}
     response = requests.get(url,params=parammeters)
-
     #4xx Status Codes (Client Error)
     if response.status_code  >= 400:
         print(f"location cannot be find. API returned ERROR. Error message {response.reason}, Error number {response.status_code}")
@@ -41,7 +40,7 @@ def get_location_by_name(city: str, state: str):
     else:
         return response.json()
 
-def check_zip_city(locations):
+def check_zip_or_city(locations):
     """
     get the detail data from the input(zip or city)
 
@@ -61,8 +60,8 @@ def check_zip_city(locations):
                         'latitude': geolocation_data[0]['lat'],
                         'longitude': geolocation_data[0]['lon']
                     }
-            else:
-                print('error finding location')
+                result.append(formatted_data)
+
         else:
             geolocation_data = get_location_by_zip_code(location)
             if geolocation_data:
@@ -72,9 +71,7 @@ def check_zip_city(locations):
                         'latitude': geolocation_data['lat'],
                         'longitude': geolocation_data['lon']
                     }
-            else:
-                print('error finding location')
-        result.append(formatted_data)
+                result.append(formatted_data)
        
     return result
 
@@ -91,9 +88,9 @@ if __name__ == '__main__':
     locations = args.locations if args.locations else args.positional_locations
     
     if not locations:
-        print("Please provide at least one location either with --locations or as positional arguments.")
+        print("Please provide location")
     else:
-        print(json.dumps(check_zip_city(locations), indent=4, ensure_ascii=False))
+        print(json.dumps(check_zip_or_city(locations), indent=4, ensure_ascii=False))
 
     
 
