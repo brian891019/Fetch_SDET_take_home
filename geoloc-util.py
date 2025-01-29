@@ -1,10 +1,6 @@
 import argparse
 import requests, json
 
-#To protect  API key, we should store it securely in an environment variable or a separate configuration file outside of your 
-#main codebase, allowing you to access it without exposing the key within your application's 
-#source code. 
-
 API_KEY = "f897a99d971b5eef57be6fafa0d83239"
 
 def get_location_by_zip_code(zip_code: str):
@@ -40,7 +36,8 @@ def get_location_by_name(city: str, state: str):
 
     #4xx Status Codes (Client Error)
     if response.status_code  >= 400:
-        return f"location cannot be find. API returned ERROR. Error message {response.reason}, Error number {response.status_code}"
+        print(f"location cannot be find. API returned ERROR. Error message {response.reason}, Error number {response.status_code}")
+        return None
     else:
         return response.json()
 
@@ -48,6 +45,8 @@ def check_zip_city(locations):
     """
     get the detail data from the input(zip or city)
 
+    :return: detailed geolocation data if found, else None.
+    :rtype: List[Dictionary]
     """
     result = []
     formatted_data = None  
@@ -77,9 +76,7 @@ def check_zip_city(locations):
                 print('error finding location')
         result.append(formatted_data)
        
-
     return result
-
 
 
 if __name__ == '__main__':
